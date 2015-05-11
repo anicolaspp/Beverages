@@ -1,0 +1,6 @@
+C:\Projects\Beverages\Source\IPC.Beverages.Import\IPC.Beverages.Import\bin\Debug\IPC.Beverages.Import.dll
+C:\Projects\Beverages\Source\IPC.Beverages.Import\IPC.Beverages.Import\bin\Debug\IPC.Beverages.Import.pdb
+C:\Projects\Beverages\Source\IPC.Beverages.Import\IPC.Beverages.Import\obj\Debug\IPC.Beverages.Import.dll
+C:\Projects\Beverages\Source\IPC.Beverages.Import\IPC.Beverages.Import\obj\Debug\IPC.Beverages.Import.pdb
+C:\Projects\Beverages\artifacts\IPC.Beverages.Import.dll
+C:\Projects\Beverages\artifacts\IPC.Beverages.Import.pdb

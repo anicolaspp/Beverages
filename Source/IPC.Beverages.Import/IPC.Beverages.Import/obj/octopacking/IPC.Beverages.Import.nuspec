@@ -1,0 +1,17 @@
+<package>
+  <metadata>
+    <id>IPC.Beverages.Import</id>
+    <version>1.0.4.14</version>
+    <authors>nperez</authors>
+    <owners>nperez</owners>
+    <licenseUrl>http://example.com</licenseUrl>
+    <projectUrl>http://example.com</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The IPC.Beverages.Import deployment package, built on 5/6/2015</description>
+    <releaseNotes></releaseNotes>
+  </metadata>
+  <files>
+    <file src="C:\Projects\Beverages\Source\IPC.Beverages.Import\IPC.Beverages.Import\bin\Release\IPC.Beverages.Import.dll" target="IPC.Beverages.Import.dll" />
+    <file src="C:\Projects\Beverages\Source\IPC.Beverages.Import\IPC.Beverages.Import\bin\Release\IPC.Beverages.Import.pdb" target="IPC.Beverages.Import.pdb" />
+  </files>
+</package>

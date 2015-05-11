@@ -1,0 +1,134 @@
+<Project DefaultTargets="Package"  xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\ExtensionPack\4.0\MSBuild.ExtensionPack.tasks"/>
+  <UsingTask AssemblyFile="MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.Framework.AssemblyInfo" />
+
+  <PropertyGroup>
+    <!-- General app info -->
+    <SolutionName>IPC.Beverages.Import.sln</SolutionName>
+    <SolutionPath>Source\IPC.Beverages.Import\$(SolutionName)</SolutionPath>
+    <Configuration>Release</Configuration>
+    <Platform>Any CPU</Platform>
+
+
+    <!--Nuget server variables-->
+    <BambooNugetsServerUrl  Condition="'$(BambooNugetsServerUrl)'==''">http://10.202.7.40:8084</BambooNugetsServerUrl>
+    <BambooNugetsServerApiKey  Condition="'$(BambooNugetsServerApiKey)'==''">Ipc12345</BambooNugetsServerApiKey>
+
+    <!--Bamboo general variables-->
+    <BambooBuildNumber Condition="'$(BambooBuildNumber)'==''" >4</BambooBuildNumber>
+
+    <!--For Octopus configuration -->
+    <BambooOctoPackPublishApiKey Condition="'$(BambooOctoPackPublishApiKey)'==''">API-ZEJPR0UGTIRVMHLA6TLT49JMXQ</BambooOctoPackPublishApiKey>
+    <BambooOctopusServerUrl  Condition="'$(BambooOctopusServerUrl)'==''">https://dev.octopus.com</BambooOctopusServerUrl>
+    <BambooOctopusProjectName Condition="'$(BambooOctopusProjectName)'==''">IPC.Beverages.Import</BambooOctopusProjectName>
+    <BambooOctopusEnviroment Condition="'$(BambooOctopusEnviroment)'==''">IPC.Beverages.Import</BambooOctopusEnviroment>
+
+
+    <!--For xUnit test-->
+    <BambooLoadTestDll Condition="'$(BambooLoadTestDll)'==''" >Source\IPC.Beverages.Import\IPC.Beverages.Import.Test\bin\Release\IPC.Beverages.Import.Test.dll</BambooLoadTestDll>
+    <BambooTestResultsPath   Condition="'$(BambooTestResultsPath)'==''" >TestResults\xUnitTestResults.xml</BambooTestResultsPath>
+    <BambooxUnitPath   Condition="'$(BambooxUnitPath)'==''" >xunit.console.x86.exe</BambooxUnitPath>
+
+    <!--For remote process-->
+    <BambooRemoteServer Condition="'$(BambooRemoteServer)'==''" ></BambooRemoteServer>
+    <BambooRemoteUser   Condition="'$(BambooRemoteUser)'==''" ></BambooRemoteUser>
+    <BambooRemotePassword   Condition="'$(BambooRemotePassword)'==''" ></BambooRemotePassword>
+    <BambooRemoteApplication   Condition="'$(BambooRemoteApplication)'==''" ></BambooRemoteApplication>
+  </PropertyGroup>
+
+  <Target Name="Compile">
+    <Message Text="****** Compiling solution *****" />
+    <MSBuild Projects="$(SolutionPath)" Targets="Rebuild" Properties="Configuration=$(Configuration);Platform=$(Platform);" />
+  </Target>
+
+  <Target Name="CreateTestResultDir">
+    <MakeDir Directories="TestResults" />
+  </Target>
+
+  <Target Name="RunxUnitTest" DependsOnTargets="CreateTestResultDir">
+    <Message Text="***** Running $(BambooLoadTestDll) Tests ******" />
+    <exec command="$(BambooxUnitPath) $(BambooLoadTestDll) -nunit $(BambooTestResultsPath)" />
+  </Target>
+
+  <Target Name="RunRemoteApplication" >
+    <Message Text="***** Running remote applicatiopn: $(BambooRemoteApplication) ******" />
+    <exec command="cmdkey.exe /add:$(BambooRemoteServer) /user:$(BambooRemoteServer)\$(BambooRemoteUser) /pass:$(BambooRemotePassword) " />
+    <exec command="psexec \\$(BambooRemoteServer) -u $(BambooRemoteUser) -p $(BambooRemotePassword) $(BambooRemoteApplication)" />
+    <exec command="cmdkey.exe /delete:$(BambooRemoteServer) " />
+  </Target>
+
+  <Target Name='FillVersions'>
+    <Message Text='Getting build major version' />
+    <ItemGroup>
+      <RevisionFileName Include="revision.txt" />
+      <VersionFilePath Include="VERSION" />
+    </ItemGroup>
+
+    <ReadLinesFromFile File="@(VersionFilePath)">
+      <Output TaskParameter="Lines" PropertyName="Version" />
+    </ReadLinesFromFile>
+
+    <Message Text="Getting Assembly Revision" />
+    <Exec Command="hg id -n > @(RevisionFileName)" />
+
+    <ReadLinesFromFile File="@(RevisionFileName)">
+      <Output TaskParameter="Lines" PropertyName="AssemblyRevision" />
+    </ReadLinesFromFile>
+
+    <CreateProperty Value="$(AssemblyRevision.Replace('+',''))">
+      <Output TaskParameter="Value" PropertyName="AssemblyRevision" />
+    </CreateProperty>
+
+    <Delete Files="@(RevisionFileName)" />
+
+    <CreateProperty Value="$(Version).$(BambooBuildNumber).$(AssemblyRevision)">
+      <Output TaskParameter="Value" PropertyName="FullVersion"/>
+    </CreateProperty>
+  </Target>
+
+  <Target Name='Version' DependsOnTargets='FillVersions'>
+    <ItemGroup>
+      <AssemblyInfoFiles Include="**\AssemblyInfo.cs" />
+    </ItemGroup>
+
+    <MSBuild.ExtensionPack.Framework.AssemblyInfo
+                          AssemblyInfoFiles="@(AssemblyInfoFiles)"
+                          AssemblyVersion="$(FullVersion)"
+                          AssemblyFileVersion="$(FullVersion)"
+                          AssemblyProduct="$(SolutionName)"/>
+  </Target>
+
+  <Target Name="Package" DependsOnTargets="Version">
+
+    <PropertyGroup>
+      <NugetRepositoryUrl>$(BambooNugetsServerUrl)</NugetRepositoryUrl>
+      <PublishApiKey>$(BambooNugetsServerApiKey)</PublishApiKey>
+    </PropertyGroup>
+
+    <MSBuild Projects="$(SolutionPath)"
+             Targets="Build"
+             Properties="Configuration=$(Configuration);Platform=$(Platform);RunOctoPack=true;OctoPackPackageVersion=$(FullVersion);OctoPackEnforceAddingFiles=true" />
+
+  </Target>
+  
+  <Target Name="PackageInPath" DependsOnTargets="Version">
+
+    <PropertyGroup>
+      <NugetPath>$(ArtifactsPath)\$(BambooPlanName)\$(BambooBuildNumber)\</NugetPath>
+    </PropertyGroup>
+
+    <MSBuild Projects="$(SolutionPath)"
+             Targets="Build"
+             Properties="Configuration=$(Configuration);Platform=$(Platform);RunOctoPack=true;OctoPackPublishPackageToFileShare=$(NugetPath);OctoPackPackageVersion=$(FullVersion);OctoPackEnforceAddingFiles=true" />
+
+  </Target>
+
+  <Target Name="CreateRelease" DependsOnTargets="FillVersions">
+    <Exec Command="Octo create-release --server=$(BambooOctopusServerUrl) --apiKey=$(BambooOctoPackPublishApiKey) --project=$(BambooOctopusProjectName) --version=$(FullVersion) --packageVersion=$(FullVersion) --ignoreexisting --ignoreSslErrors" />
+  </Target>
+
+ <Target Name="Deploy" DependsOnTargets="CreateRelease">
+    <Exec Command="Octo deploy-release --server=$(BambooOctopusServerUrl) --apiKey=$(BambooOctoPackPublishApiKey) --project=$(BambooOctopusProjectName) --version=$(FullVersion) --deployTo=$(BambooOctopusEnviroment)  " />
+  </Target>
+
+</Project>

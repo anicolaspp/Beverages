@@ -1,0 +1,5 @@
+C:\Projects\Beverages\Source\IPC.Beverages.Import\IPC.Beverages.Import\bin\Release\IPC.Beverages.Import.dll
+C:\Projects\Beverages\Source\IPC.Beverages.Import\IPC.Beverages.Import\bin\Release\IPC.Beverages.Import.pdb
+C:\Projects\Beverages\Source\IPC.Beverages.Import\IPC.Beverages.Import\obj\Release\IPC.Beverages.Import.csprojResolveAssemblyReference.cache
+C:\Projects\Beverages\Source\IPC.Beverages.Import\IPC.Beverages.Import\obj\Release\IPC.Beverages.Import.dll
+C:\Projects\Beverages\Source\IPC.Beverages.Import\IPC.Beverages.Import\obj\Release\IPC.Beverages.Import.pdb

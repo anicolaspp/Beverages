@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPC.Beverages.Import", "IPC.Beverages.Import\IPC.Beverages.Import.csproj", "{DE5DA179-1975-4ACB-A5D3-27291AE7130A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IPC.Beverages.Import.Test", "IPC.Beverages.Import.Test\IPC.Beverages.Import.Test.csproj", "{25A23F32-CAFE-4F25-AF4D-317EEDC3D6EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{434D5D00-2C1D-47A0-BADD-D1E7147A6569}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE5DA179-1975-4ACB-A5D3-27291AE7130A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE5DA179-1975-4ACB-A5D3-27291AE7130A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE5DA179-1975-4ACB-A5D3-27291AE7130A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE5DA179-1975-4ACB-A5D3-27291AE7130A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25A23F32-CAFE-4F25-AF4D-317EEDC3D6EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25A23F32-CAFE-4F25-AF4D-317EEDC3D6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25A23F32-CAFE-4F25-AF4D-317EEDC3D6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25A23F32-CAFE-4F25-AF4D-317EEDC3D6EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
