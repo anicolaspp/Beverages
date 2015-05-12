@@ -1,2 +1,4 @@
-language: C#
-solution: IPC.Beverages.Import.sln
+language: c
+install: 
+	- sudo apt-get install mono-devel mono-gmcs nunit-console
+script:
